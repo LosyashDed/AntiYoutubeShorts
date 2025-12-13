@@ -29,42 +29,50 @@ function init() {
 function updateBlockingState() {
     if (isBlockingEnabled) {
         document.body.classList.add('block-shorts');
-        checkAndBlock();
+        freezeShortsVideo();
     } else {
         document.body.classList.remove('block-shorts');
-        document.body.classList.remove('shorts-page-blocked');
     }
 }
 
-function checkAndBlock() {
+// Scan for Shorts video players and freeze them to simulate "network error/eternal loading"
+function freezeShortsVideo() {
     if (!isBlockingEnabled) return;
 
-    if (SHORTS_REGEX.test(window.location.href)) {
-        // Instead of redirecting, we simply block the view to simulate "eternal loading"
-        document.body.classList.add('shorts-page-blocked');
-    } else {
-        document.body.classList.remove('shorts-page-blocked');
+    // Only run this logic if we are actually on a Shorts page or see a Shorts player
+    if (location.pathname.startsWith('/shorts/')) {
+        const videos = document.querySelectorAll('ytd-reel-video-renderer video');
+        videos.forEach(video => {
+            if (!video.paused) {
+                video.pause();
+                video.currentTime = 0; // Keep it at start
+            }
+            // Also force volume off just in case
+            if (!video.muted) {
+                video.muted = true;
+            }
+        });
     }
 }
 
 function startObserver() {
-    // Observe DOM for changes (YouTube is SPA)
     let lastUrl = location.href;
 
-    const observer = new MutationObserver(() => {
+    const observer = new MutationObserver((mutations) => {
         const url = location.href;
+
+        // Check for URL changes if needed
         if (url !== lastUrl) {
             lastUrl = url;
-            checkAndBlock();
         }
-        // Also ensure the class is there if we are on a shorts page (in case YouTube re-renders body)
-        if (SHORTS_REGEX.test(url) && isBlockingEnabled && !document.body.classList.contains('shorts-page-blocked')) {
-            document.body.classList.add('shorts-page-blocked');
-        }
+
+        // CONSTANTLY freeze video if we are on shorts. 
+        // We do this on mutation because YouTube might try to autoplay or re-create the video element.
+        freezeShortsVideo();
     });
 
     observer.observe(document, { subtree: true, childList: true });
 
-    // Initial check
-    checkAndBlock();
+    // Fallback interval to catch any missed play events
+    setInterval(freezeShortsVideo, 500);
 }
