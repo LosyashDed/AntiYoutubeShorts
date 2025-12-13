@@ -1,19 +1,24 @@
 /* 1. СКРЫТИЕ ПОЛОК SHORTS (Очистка ленты) */
-body.block-shorts ytd-rich-shelf-renderer[is-shorts],
-body.block-shorts ytd-reel-shelf-renderer,
-body.block-shorts ytd-item-section-renderer[page-subtype="shorts"] {
+/* Используем :not(.show-shorts), чтобы по умолчанию (без JS) шортсы были СКРЫТЫ. Это Fail-Safe режим. */
+html:not(.show-shorts) ytd-rich-shelf-renderer[is-shorts],
+html:not(.show-shorts) ytd-rich-shelf-renderer:has(a[href*="/shorts"]),
+html:not(.show-shorts) ytd-reel-shelf-renderer,
+html:not(.show-shorts) ytd-item-section-renderer[page-subtype="shorts"] {
     display: none !important;
 }
 
 /* Скрытие вкладки Shorts в навигации */
-body.block-shorts ytd-guide-entry-renderer a[title="Shorts"],
-body.block-shorts ytd-mini-guide-entry-renderer a[title="Shorts"],
-body.block-shorts ytd-mini-guide-entry-renderer[aria-label="Shorts"] {
+html:not(.show-shorts) ytd-guide-entry-renderer:has(a[title="Shorts"]),
+html:not(.show-shorts) ytd-guide-entry-renderer:has(a[href*="/shorts"]),
+html:not(.show-shorts) ytd-mini-guide-entry-renderer:has(a[title="Shorts"]),
+html:not(.show-shorts) ytd-mini-guide-entry-renderer:has(a[href*="/shorts"]),
+html:not(.show-shorts) ytd-mini-guide-entry-renderer[aria-label="Shorts"],
+html:not(.show-shorts) ytd-guide-entry-renderer:has(a[aria-label="Shorts"]) {
     display: none !important;
 }
 
 /* очистка для мобильной версии */
-body.block-shorts ytm-rich-section-renderer[is-shorts] {
+html:not(.show-shorts) ytm-rich-section-renderer[is-shorts] {
     display: none !important;
 }
 

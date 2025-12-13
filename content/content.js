@@ -28,10 +28,16 @@ function init() {
 
 function updateBlockingState() {
     if (isBlockingEnabled) {
-        document.body.classList.add('block-shorts');
+        // Режим блокировки ВКЛЮЧЕН (по умолчанию):
+        // Убираем класс 'show-shorts', чтобы сработали CSS-правила html:not(.show-shorts)
+        document.body.classList.remove('show-shorts');
+        document.documentElement.classList.remove('show-shorts');
         freezeShortsVideo();
     } else {
-        document.body.classList.remove('block-shorts');
+        // Режим блокировки ВЫКЛЮЧЕН:
+        // Добавляем класс 'show-shorts', чтобы отменить скрытие
+        document.body.classList.add('show-shorts');
+        document.documentElement.classList.add('show-shorts');
     }
 }
 
