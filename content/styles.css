@@ -1,5 +1,7 @@
 /* 1. СКРЫТИЕ ПОЛОК SHORTS (Очистка ленты) */
+/* 1. HIDING SHORTS SHELVES (Cleaning the feed) */
 /* Используем :not(.show-shorts), чтобы по умолчанию (без JS) шортсы были СКРЫТЫ. Это Fail-Safe режим. */
+/* Using :not(.show-shorts) so that by default (without JS) shorts are HIDDEN. This is Fail-Safe mode. */
 html:not(.show-shorts) ytd-rich-shelf-renderer[is-shorts],
 html:not(.show-shorts) ytd-rich-shelf-renderer:has(a[href*="/shorts"]),
 html:not(.show-shorts) ytd-reel-shelf-renderer,
@@ -8,6 +10,7 @@ html:not(.show-shorts) ytd-item-section-renderer[page-subtype="shorts"] {
 }
 
 /* Скрытие вкладки Shorts в навигации */
+/* Hiding the Shorts tab in navigation */
 html:not(.show-shorts) ytd-guide-entry-renderer:has(a[title="Shorts"]),
 html:not(.show-shorts) ytd-guide-entry-renderer:has(a[href*="/shorts"]),
 html:not(.show-shorts) ytd-mini-guide-entry-renderer:has(a[title="Shorts"]),
@@ -18,19 +21,24 @@ html:not(.show-shorts) ytd-guide-entry-renderer:has(a[aria-label="Shorts"]) {
 }
 
 /* очистка для мобильной версии */
+/* cleaning up for mobile version */
 html:not(.show-shorts) ytm-rich-section-renderer[is-shorts] {
     display: none !important;
 }
 
 /* 2. СИМУЛЯЦИЯ ВЕЧНОЙ ЗАГРУЗКИ (Эффект буферизации) */
+/* 2. ETERNAL LOADING SIMULATION (Buffering effect) */
 /* Применяется только к интерфейсу плеера Shorts */
+/* Applies only to the Shorts player interface */
 
 /* Скрываем сам элемент видео, чтобы не видеть кадр */
+/* Hide the video element itself so the frame is not visible */
 body.block-shorts ytd-reel-video-renderer video {
     opacity: 0 !important;
 }
 
 /* Добавляем спиннер в контейнер плеера */
+/* Add a spinner to the player container */
 body.block-shorts ytd-reel-video-renderer .html5-video-player {
     background-color: #000 !important;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><circle cx="50" cy="50" fill="none" stroke="%23ff0033" stroke-width="8" r="30" stroke-dasharray="141.3716694115407 49.12388980384691"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform></circle></svg>');

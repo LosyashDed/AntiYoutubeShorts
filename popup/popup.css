@@ -3,10 +3,12 @@
   --text-color: #f1f1f1;
   --accent-color: #ff0033;
   /* Вдохновлено красным цветом YouTube, но немного отличается */
+  /* Inspired by YouTube red, but slightly different */
   --secondary-bg: #272727;
   --switch-bg-off: #555555;
   --switch-bg-on: #3ea6ff;
   /* Синий YouTube для активного состояния или просто Красный? Давайте используем Красный для ощущения агрессивной блокировки или Синий для стандартного UI. Давайте использовать Красный для 'Anti'. Вообще, зеленый обычно значит 'Вкл'. Давайте остановимся на чистом Красном акценте, так как это 'Anti-Shorts'. */
+  /* Blue YouTube for active state or just Red? Let's use Red for the aggressive blocking feel or Blue for standard UI. Let's use Red for 'Anti'. Actually, green usually means 'On'. Let's stick with a pure Red accent since this is 'Anti-Shorts'. */
   --switch-active: #ff0000;
 }
 
