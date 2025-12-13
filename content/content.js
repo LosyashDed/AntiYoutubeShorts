@@ -30,16 +30,19 @@ function updateBlockingState() {
     if (isBlockingEnabled) {
         // Режим блокировки ВКЛЮЧЕН (по умолчанию):
         // Убираем класс 'show-shorts', чтобы сработали CSS-правила html:not(.show-shorts)
-        document.body.classList.remove('show-shorts');
+        if (document.body) document.body.classList.remove('show-shorts');
         document.documentElement.classList.remove('show-shorts');
         freezeShortsVideo();
     } else {
         // Режим блокировки ВЫКЛЮЧЕН:
         // Добавляем класс 'show-shorts', чтобы отменить скрытие
-        document.body.classList.add('show-shorts');
+        if (document.body) document.body.classList.add('show-shorts');
         document.documentElement.classList.add('show-shorts');
     }
 }
+
+// Добавляем слушатель на загрузку DOM, чтобы убедиться, что body тоже получит класс, если он был null при запуске
+document.addEventListener('DOMContentLoaded', updateBlockingState);
 
 // Сканируем видеоплееры Shorts и замораживаем их, чтобы имитировать "ошибку сети/вечную загрузку"
 function freezeShortsVideo() {
