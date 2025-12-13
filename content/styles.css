@@ -1,0 +1,24 @@
+/* Main Shorts Shelf on Home and Search */
+body.block-shorts ytd-rich-shelf-renderer[is-shorts],
+body.block-shorts ytd-reel-shelf-renderer,
+body.block-shorts ytd-item-section-renderer[page-subtype="shorts"] {
+    display: none !important;
+}
+
+/* Shorts Tab in Side Navigation (Desktop) */
+body.block-shorts ytd-guide-entry-renderer a[title="Shorts"],
+body.block-shorts ytd-mini-guide-entry-renderer a[title="Shorts"],
+body.block-shorts ytd-mini-guide-entry-renderer[aria-label="Shorts"] {
+    display: none !important;
+}
+
+/* Shorts in Subscription Feed (Grid items that point to shorts) */
+/* This is trickier as they might look like normal videos but have overlays. 
+   Risk of false positives. Safest is just the shelves and nav. */
+
+/* Hide the specific "Shorts" chip in the top filter bar if possible (hard to target stably) */
+
+/* Mobile web cleanup (if user uses desktop mode emulation or touch) */
+body.block-shorts ytm-rich-section-renderer[is-shorts] {
+    display: none !important;
+}
