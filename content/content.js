@@ -29,50 +29,42 @@ function init() {
 function updateBlockingState() {
     if (isBlockingEnabled) {
         document.body.classList.add('block-shorts');
-        checkAndRedirect();
+        checkAndBlock();
     } else {
         document.body.classList.remove('block-shorts');
+        document.body.classList.remove('shorts-page-blocked');
     }
 }
 
-function checkAndRedirect() {
+function checkAndBlock() {
     if (!isBlockingEnabled) return;
 
     if (SHORTS_REGEX.test(window.location.href)) {
-        const videoId = window.location.pathname.split('/').pop();
-        if (videoId) {
-            const newUrl = window.location.protocol + '//' + window.location.host + '/watch?v=' + videoId;
-            window.location.replace(newUrl);
-        }
+        // Instead of redirecting, we simply block the view to simulate "eternal loading"
+        document.body.classList.add('shorts-page-blocked');
+    } else {
+        document.body.classList.remove('shorts-page-blocked');
     }
 }
 
 function startObserver() {
     // Observe DOM for changes (YouTube is SPA)
-    // We use a MutationObserver to detect navigation or page updates.
-    // Checking on every mutation is expensive, so we throttle or check specifics.
-    // However, for URL redirection, we primarily need to know when URL changes.
-
     let lastUrl = location.href;
 
     const observer = new MutationObserver(() => {
         const url = location.href;
         if (url !== lastUrl) {
             lastUrl = url;
-            checkAndRedirect();
+            checkAndBlock();
         }
-
-        // Also re-apply checks if needed, but CSS handles visibility mostly.
-        // Redirection is the main JS responsibility during nav.
+        // Also ensure the class is there if we are on a shorts page (in case YouTube re-renders body)
+        if (SHORTS_REGEX.test(url) && isBlockingEnabled && !document.body.classList.contains('shorts-page-blocked')) {
+            document.body.classList.add('shorts-page-blocked');
+        }
     });
 
     observer.observe(document, { subtree: true, childList: true });
 
-    // Fallback: Check constantly on interval just in case Observer misses a speedy history update (rare but possible)
-    setInterval(() => {
-        if (location.href !== lastUrl) {
-            lastUrl = location.href;
-            checkAndRedirect();
-        }
-    }, 1000);
+    // Initial check
+    checkAndBlock();
 }

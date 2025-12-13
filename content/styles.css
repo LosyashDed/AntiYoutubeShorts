@@ -12,13 +12,29 @@ body.block-shorts ytd-mini-guide-entry-renderer[aria-label="Shorts"] {
     display: none !important;
 }
 
-/* Shorts in Subscription Feed (Grid items that point to shorts) */
-/* This is trickier as they might look like normal videos but have overlays. 
-   Risk of false positives. Safest is just the shelves and nav. */
-
-/* Hide the specific "Shorts" chip in the top filter bar if possible (hard to target stably) */
-
 /* Mobile web cleanup (if user uses desktop mode emulation or touch) */
 body.block-shorts ytm-rich-section-renderer[is-shorts] {
     display: none !important;
+}
+
+/* BLOCKED (Eternal Loading) STATE */
+body.shorts-page-blocked ytd-app {
+    display: none !important;
+}
+
+body.shorts-page-blocked::before {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0f0f0f;
+    /* YouTube Dark Background */
+    z-index: 99999;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><circle cx="50" cy="50" fill="none" stroke="%23ff0033" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform></circle></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50px;
 }
