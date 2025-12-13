@@ -2,21 +2,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('shortsToggle');
   const statusText = document.getElementById('statusText');
 
-  // Load saved state
+  // Загружаем сохраненное состояние
   chrome.storage.local.get(['blockShorts'], (result) => {
-    // Default to true if not set
+    // По умолчанию true, если не задано
     const isBlocked = result.blockShorts !== undefined ? result.blockShorts : true;
     toggle.checked = isBlocked;
     updateStatusText(isBlocked);
   });
 
-  // Handle changes
+  // Обработка изменений
   toggle.addEventListener('change', () => {
     const isBlocked = toggle.checked;
     chrome.storage.local.set({ blockShorts: isBlocked }, () => {
       updateStatusText(isBlocked);
-      // Notify active tab to update immediately without reload
-      // We query tabs that match youtube
+      // Уведомляем активную вкладку для мгновенного обновления без перезагрузки
+      // Ищем вкладки, соответствующие youtube
       chrome.tabs.query({ url: "*://*.youtube.com/*" }, (tabs) => {
         tabs.forEach(tab => {
           chrome.tabs.sendMessage(tab.id, { type: 'UPDATE_STATE', isBlocked: isBlocked });

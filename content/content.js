@@ -1,20 +1,20 @@
-// Configuration
+// Конфигурация
 const SHORTS_REGEX = /\/shorts\//;
 
-// State
+// Состояние
 let isBlockingEnabled = true;
 
-// Initialize
+// Инициализация
 init();
 
 function init() {
-    // Load initial settings
+    // Загрузка начальных настроек
     chrome.storage.local.get(['blockShorts'], (result) => {
         isBlockingEnabled = result.blockShorts !== undefined ? result.blockShorts : true;
         updateBlockingState();
     });
 
-    // Listen for messages from Popup
+    // Слушаем сообщения от Popup
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if (request.type === 'UPDATE_STATE') {
             isBlockingEnabled = request.isBlocked;
@@ -22,7 +22,7 @@ function init() {
         }
     });
 
-    // Start observing the page for navigation and dynamic content
+    // Запускаем наблюдение за страницей для отслеживания навигации и динамического контента
     startObserver();
 }
 
@@ -35,19 +35,19 @@ function updateBlockingState() {
     }
 }
 
-// Scan for Shorts video players and freeze them to simulate "network error/eternal loading"
+// Сканируем видеоплееры Shorts и замораживаем их, чтобы имитировать "ошибку сети/вечную загрузку"
 function freezeShortsVideo() {
     if (!isBlockingEnabled) return;
 
-    // Only run this logic if we are actually on a Shorts page or see a Shorts player
+    // Запускаем эту логику только если мы действительно на странице Shorts или видим плеер Shorts
     if (location.pathname.startsWith('/shorts/')) {
         const videos = document.querySelectorAll('ytd-reel-video-renderer video');
         videos.forEach(video => {
             if (!video.paused) {
                 video.pause();
-                video.currentTime = 0; // Keep it at start
+                video.currentTime = 0; // Держим в начале
             }
-            // Also force volume off just in case
+            // Также принудительно выключаем звук на случай, если он включится
             if (!video.muted) {
                 video.muted = true;
             }
@@ -61,18 +61,18 @@ function startObserver() {
     const observer = new MutationObserver((mutations) => {
         const url = location.href;
 
-        // Check for URL changes if needed
+        // Проверяем изменение URL, если нужно
         if (url !== lastUrl) {
             lastUrl = url;
         }
 
-        // CONSTANTLY freeze video if we are on shorts. 
-        // We do this on mutation because YouTube might try to autoplay or re-create the video element.
+        // ПОСТОЯННО замораживаем видео, если мы на шортсах. 
+        // Делаем это при мутации, потому что YouTube может попытаться запустить автоплей или пересоздать элемент видео.
         freezeShortsVideo();
     });
 
     observer.observe(document, { subtree: true, childList: true });
 
-    // Fallback interval to catch any missed play events
+    // Резервный интервал для отлова пропущенных событий воспроизведения
     setInterval(freezeShortsVideo, 500);
 }
