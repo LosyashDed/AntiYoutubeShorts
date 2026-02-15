@@ -1,5 +1,7 @@
 [Read in English](README.md)
 
+> Made by [losyash](http://losyashded.ru/)
+
 # Anti-Shorts
 
 Расширение для браузера Chrome, которое очищает вашу ленту от YouTube Shorts и превращает ссылки на Shorts в обычные видео.
