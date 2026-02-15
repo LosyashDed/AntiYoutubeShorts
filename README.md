@@ -1,5 +1,7 @@
 [Читать на русском](README_RU.md)
 
+> Made by [losyash](http://losyashded.ru/)
+
 # Anti-Shorts
 
 A Chrome browser extension that cleans your feed from YouTube Shorts and converts Shorts links into normal videos.
